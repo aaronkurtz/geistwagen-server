@@ -1,10 +1,10 @@
 from setuptools import setup
 
-setup(name='YourAppName',
+setup(name='Geistwagen',
       version='1.0',
-      description='OpenShift App',
-      author='Your Name',
-      author_email='example@example.com',
+      description='Stone Soup Bones file sharing',
+      author='Aaron Kurtz',
+      author_email='a.kurtz@hardsun.net',
       url='http://www.python.org/sigs/distutils-sig/',
-      install_requires=['bottle'],
+      install_requires=['bottle','pymongo'],
      )
