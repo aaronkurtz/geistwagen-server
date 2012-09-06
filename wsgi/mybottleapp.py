@@ -4,6 +4,7 @@ from pysoup import verify_bones_file
 
 from bottle import route, get, put, request, default_app
 from bottle import abort
+import bson
 import pymongo
 import random
 
@@ -36,7 +37,7 @@ def upload():
     abort(400, 'No data received')
   elif not (verify_bones_file):
     abort(400, 'Bad data received')
-  document = {'file':data}
+  document = {'file':bson.Binary(data)}
   mongo_db.bones.insert(document)
   return 'Uploaded bones file'
 
