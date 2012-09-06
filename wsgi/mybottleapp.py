@@ -22,7 +22,7 @@ def index():
 @get('/bones')
 def download():
   count = mongo_db.bones.count()
-  result = db.bones.find().limit(-1).skip(random.randrange(0,count)).next()
+  result = mongo_db.bones.find().limit(-1).skip(random.randrange(0,count)).next()
   return result
   
 
