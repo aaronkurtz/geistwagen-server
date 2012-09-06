@@ -27,7 +27,7 @@ def download():
   if 0==count:
       abort(400, 'No bones exist')
   result = mongo_db.bones.find().limit(-1).skip(random.randrange(0,count)).next()
-  return result
+  return str(result['file'])
   
 
 @put('/bones')
