@@ -37,7 +37,7 @@ def upload():
   elif not (verify_bones_file):
     abort(400, 'Bad data received')
   document = {'file':data}
-  mongo_db.bones.insert(document
+  mongo_db.bones.insert(document)
   return 'Uploaded bones file'
 
 
