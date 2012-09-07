@@ -26,7 +26,7 @@ def index():
 def download():
   count = mongo_db.bones.count()
   if 0 == count:
-      abort(400, 'No bones exist')
+      abort(400, 'No bones exist\n')
   result = mongo_db.bones.find().limit(-1).skip(random.randrange(0,count)).next()
   return str(result['file'])
   
@@ -37,12 +37,12 @@ def upload():
   logging.warning(request.headers.keys())
   logging.warning(request.files.filename)
   if not data:
-    abort(400, 'No data received')
+    abort(400, 'No data received\n')
   elif not (verify_bones_file):
-    abort(403, 'Bad data received')
+    abort(403, 'Bad data received\n')
   document = {'file':bson.Binary(data)}
   mongo_db.bones.insert(document)
-  return 'Uploaded bones file'
+  return 'Uploaded bones file\n'
 
 
 # This must be added in order to do correct path lookups for the views
