@@ -28,7 +28,7 @@ def download():
 #TODO ban abusive downloaders
   ip = request.headers['X-Forwarded-For']
 #TODO exclude already existing levels to avoid overwriting ghosts through query
-  sameip = request.query.sameip or false
+  sameip = request.query.sameip or False
   if sameip:
     count = mongo_db.bones.count()
     if 0 == count:
