@@ -8,7 +8,7 @@ from bottle import abort
 import bson
 import pymongo
 import random
-import md5
+import hashlib
 
 
 mongo_con = pymongo.Connection(
@@ -41,9 +41,7 @@ def upload(level):
     abort(400, 'No data received\n')
   elif not (verify_bones_file(data)):
     abort(403, 'Bad data received\n')
-  m = md5.new()
-  m.update(data)
-  md5sum = m.hexdigest()
+  md5sum = hashlib.md5(data).hexdigest()
   ip = request.headers['X-Forwarded-For']
   document = {'file':bson.Binary(data), 'ip':ip, 'md5':md5sum, 'level':level}
   mongo_db.bones.insert(document)
