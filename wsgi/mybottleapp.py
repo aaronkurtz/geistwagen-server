@@ -35,7 +35,7 @@ def download():
   
 
 @post('/bones.<level>')
-def upload():
+def upload(level):
   data = request.body.readline()
   if not data:
     abort(400, 'No data received\n')
