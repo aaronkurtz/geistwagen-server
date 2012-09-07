@@ -3,7 +3,7 @@ import logging
 sys.path.append(os.path.join(os.getenv("OPENSHIFT_REPO_DIR"), "libs"))
 from pysoup import verify_bones_file
 
-from bottle import route, get, put, request, default_app
+from bottle import route, get, post, request, default_app
 from bottle import abort
 import bson
 import pymongo
