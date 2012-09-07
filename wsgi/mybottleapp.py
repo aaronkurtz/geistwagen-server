@@ -25,6 +25,7 @@ def index():
 
 @get('/bones')
 def download():
+#TODO ban abusive downloaders
   ip = request.headers['X-Forwarded-For']
   logging.warn(request.headers.items())
 #TODO only download files uploaded from other IPs unless query option is set
@@ -48,7 +49,8 @@ def upload(level):
   elif not (verify_bones_file(data)):
     abort(403, 'Bad data received\n')
   md5sum = hashlib.md5(data).hexdigest()
-  #TODO check if file was already uploaded
+  if mongo_db.bones.find({'md5':md5sum}).size():
+    abort(401, 'File already exists\n')
   ip = request.headers['X-Forwarded-For']
   document = {'file':bson.Binary(data), 'ip':ip, 'md5':md5sum, 'level':level}
   mongo_db.bones.insert(document)
