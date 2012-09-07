@@ -26,17 +26,19 @@ def index():
 @get('/bones')
 def download():
   ip = request.headers['X-Forwarded-For']
-#TODO only download files uploaded from other IPs
+#TODO only download files uploaded from other IPs unless query option is set
+#TODO exclude already existing levels to avoid overwriting ghosts through query
   count = mongo_db.bones.count()
   if 0 == count:
       abort(400, 'No bones exist\n')
   result = mongo_db.bones.find().limit(-1).skip(random.randrange(0,count)).next()
-  response.set_header('Content-Disposition','filename=bones.'+result['level'])
+  response.set_header('Content-Disposition','attachment; filename=bones.'+result['level'])
   return str(result['file'])
   
 
 @post('/bones.<level>')
 def upload(level):
+  #TODO blacklist trolls
   if request.content_length > (100*20):
     abort(400, 'Improper data received\n')
   data = request.body.read()
