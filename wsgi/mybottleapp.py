@@ -31,8 +31,8 @@ def download():
   if 0 == count:
       abort(400, 'No bones exist\n')
   result = mongo_db.bones.find().limit(-1).skip(random.randrange(0,count)).next()
+  response.set_header('Content-Disposition','filename=bones.'+result['level'])
   return str(result['file'])
-#TODO use Content Disposition to suggest filename
   
 
 @post('/bones.<level>')
