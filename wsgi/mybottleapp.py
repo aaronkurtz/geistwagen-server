@@ -1,5 +1,5 @@
 import os,sys
-import loggingG
+import logging
 sys.path.append(os.path.join(os.getenv("OPENSHIFT_REPO_DIR"), "libs"))
 from pysoup import verify_bones_file
 
