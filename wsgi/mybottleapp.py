@@ -26,6 +26,7 @@ def index():
 @get('/bones')
 def download():
   ip = request.headers['X-Forwarded-For']
+  logging.warn(request.headers.items())
 #TODO only download files uploaded from other IPs unless query option is set
 #TODO exclude already existing levels to avoid overwriting ghosts through query
   count = mongo_db.bones.count()
