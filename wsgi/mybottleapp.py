@@ -3,8 +3,8 @@ import logging
 sys.path.append(os.path.join(os.getenv("OPENSHIFT_REPO_DIR"), "libs"))
 from pysoup import verify_bones_file
 
-from bottle import route, get, post, request, default_app
-from bottle import abort
+from bottle import route, get, post, request, response, abort
+from bottle import default_app
 import bson
 import pymongo
 import random
@@ -26,6 +26,7 @@ def index():
 @get('/bones')
 def download():
   ip = request.headers['X-Forwarded-For']
+#TODO only download files uploaded from other IPs
   count = mongo_db.bones.count()
   if 0 == count:
       abort(400, 'No bones exist\n')
@@ -36,12 +37,15 @@ def download():
 
 @post('/bones.<level>')
 def upload(level):
+  if request.content_length > (100*20):
+    abort(400, 'Improper data received\n')
   data = request.body.read()
   if not data:
     abort(400, 'No data received\n')
   elif not (verify_bones_file(data)):
     abort(403, 'Bad data received\n')
   md5sum = hashlib.md5(data).hexdigest()
+  #TODO check if file was already uploaded
   ip = request.headers['X-Forwarded-For']
   document = {'file':bson.Binary(data), 'ip':ip, 'md5':md5sum, 'level':level}
   mongo_db.bones.insert(document)
