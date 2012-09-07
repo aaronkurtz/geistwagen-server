@@ -42,7 +42,7 @@ def upload(level):
   #elif not (verify_bones_file(data)):
   #  abort(403, 'Bad data received\n')
   md5sum = hashlib.md5(data).hexdigest()
-  if not (verify_bones_file(data):
+  if not (verify_bones_file(data)):
       logging.warning(md5sum)
   ip = request.headers['X-Forwarded-For']
   document = {'file':bson.Binary(data), 'ip':ip, 'md5':md5sum, 'level':level}
