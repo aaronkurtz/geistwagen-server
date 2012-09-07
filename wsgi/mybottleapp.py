@@ -31,10 +31,10 @@ def download():
   return str(result['file'])
   
 
-@put('/bones')
+@post('/bones')
 def upload():
   data = request.body.readline()
-  logging.warning(request.headers)
+  logging.warning(print(request.headers))
   logging.warning(request.files.filename)
   if not data:
     abort(400, 'No data received')
