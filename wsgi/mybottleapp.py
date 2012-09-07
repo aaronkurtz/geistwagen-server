@@ -38,7 +38,7 @@ def upload():
   logging.warning(request.files.filename)
   if not data:
     abort(400, 'No data received\n')
-  elif not (verify_bones_file):
+  elif not (verify_bones_file(data)):
     abort(403, 'Bad data received\n')
   document = {'file':bson.Binary(data)}
   mongo_db.bones.insert(document)
