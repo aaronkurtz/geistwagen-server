@@ -27,13 +27,19 @@ def index():
 def download():
 #TODO ban abusive downloaders
   ip = request.headers['X-Forwarded-For']
-  logging.warn(request.headers.items())
-#TODO only download files uploaded from other IPs unless query option is set
 #TODO exclude already existing levels to avoid overwriting ghosts through query
-  count = mongo_db.bones.count()
-  if 0 == count:
-      abort(400, 'No bones exist\n')
-  result = mongo_db.bones.find().limit(-1).skip(random.randrange(0,count)).next()
+  sameip = request.query.sameip or false
+  if sameip:
+    count = mongo_db.bones.count()
+    if 0 == count:
+      abort(404, 'No bones exist\n')
+    result = mongo_db.bones.find().limit(-1).skip(random.randrange(0,count)).next()
+  else:    
+    cursor = mongo.db_bones.find({'ip':{$nin:[ip]}})
+    count = cursor.count()
+    if 0 == count:
+      abort(404, 'No bones exist\n')
+    result = cursor.limit(-1).skip(random.randrange(0,count)).next()
   response.set_header('Content-Disposition','attachment; filename=bones.'+result['level'])
   return str(result['file'])
   
