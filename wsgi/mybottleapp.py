@@ -40,7 +40,7 @@ def download():
 def upload(level):
   #TODO blacklist trolls
   if request.content_length > (100*20):
-    abort(400, 'Improper data received\n')
+    abort(403, 'Bad data received\n')
   data = request.body.read()
   if not data:
     abort(400, 'No data received\n')
