@@ -34,7 +34,7 @@ def download():
 @post('/bones')
 def upload():
   data = request.body.readline()
-  logging.warning(print(request.headers))
+  logging.warning(request.headers.keys())
   logging.warning(request.files.filename)
   if not data:
     abort(400, 'No data received')
