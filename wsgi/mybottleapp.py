@@ -37,7 +37,7 @@ def download():
       abort(404, 'No bones exist\n')
     result = mongo_db.bones.find().limit(-1).skip(random.randrange(0,count)).next()
   else:    
-    cursor = mongo.db_bones.find({'ip':{'$nin':[ip]}})
+    cursor = mongo_db.bones.find({'ip':{'$nin':[ip]}})
     count = cursor.count()
     if 0 == count:
       abort(404, 'No bones exist\n')
