@@ -26,11 +26,13 @@ def index():
 @get('/bones')
 def download():
 #TODO ban abusive downloaders
-  ip = request.headers['X-Forwarded-For']
-#TODO exclude already existing levels to avoid overwriting ghosts through query
   debug = request.query.debug or False
+#TODO delete bones files unless Keep enabled
   keep = request.query.exclude or False
-  sameip = request.query.sameip or []
+  if request.query.sameip:
+      ip = request.headers['X-Forwarded-For']
+  else:
+      ip = []
   excluded = request.query.exclude.split('.') or []
   cursor = mongo_db.bones.find({'ip':{'$nin':[ip]},'level':{'$nin':excluded}})
   count = cursor.count()
