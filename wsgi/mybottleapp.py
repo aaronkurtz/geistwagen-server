@@ -28,8 +28,9 @@ def download():
 #TODO ban abusive downloaders
   ip = request.headers['X-Forwarded-For']
 #TODO exclude already existing levels to avoid overwriting ghosts through query
+  debug = request.query.debug or False
   sameip = request.query.sameip or False
-  logging.warning(request.query.exclude)
+  exclude = request.query.exlude or False
   if sameip:
     count = mongo_db.bones.count()
     if 0 == count:
@@ -42,6 +43,8 @@ def download():
       abort(404, 'No bones exist\n')
     result = cursor.limit(-1).skip(random.randrange(0,count)).next()
   response.set_header('Content-Disposition','attachment; filename=bones.'+result['level'])
+  if debug:
+      return request.query.items() + request.query_string + result['level'] + "Count: " + count
   return str(result['file'])
   
 
