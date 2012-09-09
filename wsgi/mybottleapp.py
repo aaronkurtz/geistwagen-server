@@ -25,13 +25,12 @@ def index():
 
 @get('/bones')
 def download():
+  ip = request.headers['X-Forwarded-For']
 #TODO ban abusive downloaders
   debug = request.query.debug or False
 #TODO delete bones files unless Keep enabled
   keep = request.query.exclude or False
   if request.query.sameip:
-      ip = request.headers['X-Forwarded-For']
-  else:
       ip = []
   excluded = request.query.exclude.split('.') or []
   cursor = mongo_db.bones.find({'ip':{'$nin':[ip]},'level':{'$nin':excluded}})
@@ -40,7 +39,7 @@ def download():
     abort(404, 'No bones exist\n')
   result = cursor.limit(-1).skip(random.randrange(0,count)).next()
   if debug:
-      return str((request.query.items() , request.query_string , result['level'] , "Count: " , count))
+      return str((request.query_string , keep, ip, excluded, count, result['level']))
   response.set_header('Content-Disposition','attachment; filename=bones.'+result['level'])
   return str(result['file'])
   
