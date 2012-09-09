@@ -20,7 +20,7 @@ To upload, POST bones files to /bones.LEVEL, where LEVEL is a legitimate crawl l
 
 examples:
 #TODO Go to http://geistwagen-hardsun.rhcloud.com/upload in a browser
-curl -X POST bones.LEVEL http://geistwagen-hardsun.rhcloud.com/bones.LEVEL
+curl -X POST -T bones.LEVEL http://geistwagen-hardsun.rhcloud.com/bones.LEVEL
 wget -O- --post-file bones.LEVEL http://geistwagen-hardsun.rhcloud.com/bones.LEVEL
 
 To download, GET /bones and save according to the Content-Disposition header
