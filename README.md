@@ -12,7 +12,7 @@ Inspired by Nethack's Hearse.
 
 HOW? 
 
-#TODO Short answer: use geistwagen-client
+Short answer: use geistwagen-client
 
 Long answer:
 
@@ -26,8 +26,8 @@ wget -O- --post-file bones.LEVEL http://geistwagen-hardsun.rhcloud.com/bones.LEV
 To download, GET /bones and save according to the Content-Disposition header
 
 examples:
-Go to http://geistwagen-hardsun.rhcloud.com/bones in a browser
+#TODO Go to http://geistwagen-hardsun.rhcloud.com/bones in a browser
 curl -J -O http://geistwagen-hardsun.rhcloud.com/bones
 wget --content-disposition http://geistwagen-hardsun.rhcloud.com/bones
 
-#TODO Query options to enable same-IP downloading and avoid already existing levels
+#TODO Include query option explanations
