@@ -1,5 +1,6 @@
 import os,sys
 import logging
+import datetime
 sys.path.append(os.path.join(os.getenv("OPENSHIFT_REPO_DIR"), "libs"))
 from pysoup import verify_bones_file
 
@@ -28,12 +29,13 @@ def download():
   ip = request.headers['X-Forwarded-For']
 #TODO ban abusive downloaders
   debug = request.query.debug or False
-#TODO delete bones files unless Keep enabled
   keep = request.query.exclude or False
   if request.query.sameip:
-      ip = []
+      blockip = []
+  else:
+      blockip = ip
   excluded = request.query.exclude.split('.') or []
-  cursor = mongo_db.bones.find({'ip':{'$nin':[ip]},'level':{'$nin':excluded}})
+  cursor = mongo_db.bones.find({'ip':{'$nin':[blockip]},'level':{'$nin':excluded}})
   count = cursor.count()
   if 0 == count:
     if debug:
@@ -43,6 +45,11 @@ def download():
   if debug:
       return str((request.query_string , keep, ip, excluded, count, result['level']))
   response.set_header('Content-Disposition','attachment; filename=bones.'+result['level'])
+  if not keep:
+      mongo_db.bones.remove({'_id':result['id']})
+      result['downloader'] = ip
+      result['downloaded date'] = datetime.datetime.utcnow()
+      mongo_db.old_bones.insert(result)
   return str(result['file'])
   
 
@@ -60,7 +67,7 @@ def upload(level):
   md5sum = hashlib.md5(data).hexdigest()
   if mongo_db.bones.find({'md5':md5sum}).count():
     abort(401, 'File already exists\n')
-  document = {'file':bson.Binary(data), 'ip':ip, 'md5':md5sum, 'level':level}
+  document = {'file':bson.Binary(data), 'ip':ip, 'md5':md5sum, 'level':level, 'date':datetime.datetime.utcnow()}
   mongo_db.bones.insert(document)
   return 'Uploaded bones file\n'
 
