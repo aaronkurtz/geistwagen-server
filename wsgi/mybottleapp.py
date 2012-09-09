@@ -29,19 +29,14 @@ def download():
   ip = request.headers['X-Forwarded-For']
 #TODO exclude already existing levels to avoid overwriting ghosts through query
   debug = request.query.debug or False
-  sameip = request.query.sameip or False
-  exclude = request.query.exlude or False
-  if sameip:
-    count = mongo_db.bones.count()
-    if 0 == count:
-      abort(404, 'No bones exist\n')
-    result = mongo_db.bones.find().limit(-1).skip(random.randrange(0,count)).next()
-  else:    
-    cursor = mongo_db.bones.find({'ip':{'$nin':[ip]}})
-    count = cursor.count()
-    if 0 == count:
-      abort(404, 'No bones exist\n')
-    result = cursor.limit(-1).skip(random.randrange(0,count)).next()
+  keep = request.query.exclude or False
+  sameip = request.query.sameip or []
+  excluded = request.query.exclude.split('.') or []
+  cursor = mongo_db.bones.find({'ip':{'$nin':[ip]},'level':{'$nin':excluded}})
+  count = cursor.count()
+  if 0 == count:
+    abort(404, 'No bones exist\n')
+  result = cursor.limit(-1).skip(random.randrange(0,count)).next()
   if debug:
       return str((request.query.items() , request.query_string , result['level'] , "Count: " , count))
   response.set_header('Content-Disposition','attachment; filename=bones.'+result['level'])
