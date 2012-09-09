@@ -43,7 +43,7 @@ def download():
       abort(404, 'No bones exist\n')
     result = cursor.limit(-1).skip(random.randrange(0,count)).next()
   if debug:
-      return str(request.query.items() , request.query_string , result['level'] , "Count: " , count)
+      return str((request.query.items() , request.query_string , result['level'] , "Count: " , count))
   response.set_header('Content-Disposition','attachment; filename=bones.'+result['level'])
   return str(result['file'])
   
