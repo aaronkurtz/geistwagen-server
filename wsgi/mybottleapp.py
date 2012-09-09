@@ -46,7 +46,7 @@ def download():
       return str((request.query_string , keep, ip, excluded, count, result['level']))
   response.set_header('Content-Disposition','attachment; filename=bones.'+result['level'])
   if not keep:
-      mongo_db.bones.remove({'_id':result['id']})
+      mongo_db.bones.remove({'_id':result['_id']})
       result['downloader'] = ip
       result['downloaded date'] = datetime.datetime.utcnow()
       mongo_db.old_bones.insert(result)
