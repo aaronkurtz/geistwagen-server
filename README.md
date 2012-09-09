@@ -16,18 +16,19 @@ Short answer: use geistwagen-client
 
 Long answer:
 
-To upload, POST bones files to /bones.LEVEL, where LEVEL is a legitimate crawl level
+To upload, PUT bones files to /bones.LEVEL, where LEVEL is a legitimate crawl level
 
 examples:
-#TODO Go to http://geistwagen-hardsun.rhcloud.com/upload in a browser
-curl -X POST -T bones.LEVEL http://geistwagen-hardsun.rhcloud.com/bones.LEVEL
-wget -O- --post-file bones.LEVEL http://geistwagen-hardsun.rhcloud.com/bones.LEVEL
+curl -X PUT -T bones.LEVEL http://geistwagen-hardsun.rhcloud.com/bones.LEVEL
 
 To download, GET /bones and save according to the Content-Disposition header
 
 examples:
-#TODO Go to http://geistwagen-hardsun.rhcloud.com/bones in a browser
 curl -J -O http://geistwagen-hardsun.rhcloud.com/bones
 wget --content-disposition http://geistwagen-hardsun.rhcloud.com/bones
 
-#TODO Include query option explanations
+Options include:
+sameip=True - download files uploaded by your IP address, which is usually disabled
+keep=True - don't have the server delete the bones file you downloaded
+exclude=D-1.D-2.D-3 period-separated list of levels to not download
+debug=True - get debug output of what your request would give

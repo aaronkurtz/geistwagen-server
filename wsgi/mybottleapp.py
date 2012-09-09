@@ -4,7 +4,7 @@ import datetime
 sys.path.append(os.path.join(os.getenv("OPENSHIFT_REPO_DIR"), "libs"))
 from pysoup import verify_bones_file
 
-from bottle import route, get, post, request, response, abort
+from bottle import route, get, put, request, response, abort
 from bottle import default_app
 import bson
 import pymongo
@@ -53,7 +53,7 @@ def download():
   return str(result['file'])
   
 
-@post('/bones.<level>')
+@put('/bones.<level>')
 def upload(level):
   ip = request.headers['X-Forwarded-For']
   #TODO blacklist trolls
