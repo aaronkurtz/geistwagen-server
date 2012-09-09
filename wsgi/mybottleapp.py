@@ -36,6 +36,8 @@ def download():
   cursor = mongo_db.bones.find({'ip':{'$nin':[ip]},'level':{'$nin':excluded}})
   count = cursor.count()
   if 0 == count:
+    if debug:
+      return str((request.query_string , keep, ip, excluded, count))
     abort(404, 'No bones exist\n')
   result = cursor.limit(-1).skip(random.randrange(0,count)).next()
   if debug:
@@ -46,6 +48,7 @@ def download():
 
 @post('/bones.<level>')
 def upload(level):
+  ip = request.headers['X-Forwarded-For']
   #TODO blacklist trolls
   if request.content_length > (100*20):
     abort(403, 'Bad data received\n')
@@ -57,7 +60,6 @@ def upload(level):
   md5sum = hashlib.md5(data).hexdigest()
   if mongo_db.bones.find({'md5':md5sum}).count():
     abort(401, 'File already exists\n')
-  ip = request.headers['X-Forwarded-For']
   document = {'file':bson.Binary(data), 'ip':ip, 'md5':md5sum, 'level':level}
   mongo_db.bones.insert(document)
   return 'Uploaded bones file\n'
