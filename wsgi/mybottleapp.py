@@ -29,7 +29,7 @@ def download():
   ip = request.headers['X-Forwarded-For']
 #TODO ban abusive downloaders
   debug = request.query.debug or False
-  keep = request.query.exclude or False
+  delete = request.query.delete or False
   if request.query.sameip:
       blockip = []
   else:
@@ -39,13 +39,13 @@ def download():
   count = cursor.count()
   if 0 == count:
     if debug:
-      return str((request.query_string , keep, ip, excluded, count))
+      return str((request.query_string , delete, ip, excluded, count))
     abort(404, 'No bones exist\n')
   result = cursor.limit(-1).skip(random.randrange(0,count)).next()
   if debug:
-      return str((request.query_string , keep, ip, excluded, count, result['level']))
+      return str((request.query_string , delete, ip, excluded, count, result['level']))
   response.set_header('Content-Disposition','attachment; filename=bones.'+result['level'])
-  if not keep:
+  if delete:
       mongo_db.bones.remove({'_id':result['_id']})
       result['downloader'] = ip
       result['downloaded date'] = datetime.datetime.utcnow()

@@ -37,7 +37,7 @@ Options include:
 
 sameip=True - download files uploaded by your IP address, which is usually disabled
 
-keep=True - don't have the server delete the bones file you downloaded
+delete=True - have the server delete the bones file you downloaded
 
 exclude=D-1.D-2.D-3 period-separated list of levels to not download
 
