@@ -5,12 +5,13 @@ sys.path.append(os.path.join(os.getenv("OPENSHIFT_REPO_DIR"), "libs"))
 from pysoup import verify_bones_file
 
 from bottle import route, get, put, request, response, abort
-from bottle import default_app
+from bottle import default_app, static_file
 import bson
 import pymongo
 import random
 import hashlib
 
+LATEST_CLIENT_VERSION = '120913'
 
 mongo_con = pymongo.Connection(
   os.environ['OPENSHIFT_NOSQL_DB_HOST'],
@@ -23,6 +24,10 @@ mongo_db.authenticate(os.environ['OPENSHIFT_NOSQL_DB_USERNAME'],
 @route('/')
 def index():
     return 'Geistwagen'
+
+@route('/latest_client_version')
+def version():
+    return LATEST_CLIENT_VERSION
 
 @get('/bones')
 def download():
