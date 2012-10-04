@@ -11,7 +11,7 @@ import pymongo
 import random
 import hashlib
 
-LATEST_CLIENT_VERSION = '120913'
+LATEST_CLIENT_VERSION = '20121004'
 
 mongo_con = pymongo.Connection(
   os.environ['OPENSHIFT_NOSQL_DB_HOST'],
